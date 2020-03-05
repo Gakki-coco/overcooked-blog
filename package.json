@@ -1,0 +1,23 @@
+{
+  "name": "overcooked-blog",
+  "version": "1.0.0",
+  "description": "A overcooked blog",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "start": "node --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gakki-coco/overcooked-blog.git"
+  },
+  "keywords": [],
+  "author": "Gakki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gakki-coco/overcooked-blog/issues"
+  },
+  "homepage": "https://github.com/Gakki-coco/overcooked-blog#readme"
+}
