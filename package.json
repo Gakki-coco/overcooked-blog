@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "start": "node --inspect index.js"
+    "start": "nodemon --inspect index.js"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/Gakki-coco/overcooked-blog/issues"
   },
-  "homepage": "https://github.com/Gakki-coco/overcooked-blog#readme"
+  "homepage": "https://github.com/Gakki-coco/overcooked-blog#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
