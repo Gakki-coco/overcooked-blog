@@ -24,8 +24,13 @@ class App {
                 if (url === '/') {
                     url = '/index.html'
                 }
-                fs.readFile(getPath(url), 'utf-8', (error, data) => {
-                    response.end(data)
+                fs.readFile(getPath(url), 'binary', (error, data) => {
+                    if (error) {
+                        data = `NOT FOUND ${error.stack}`
+                    }
+                    // encoding binary ==> buffer
+                    // 继承了流 stream
+                    response.end(data, 'binary')
                 })
             }
             staticFunc(url)
