@@ -1,8 +1,13 @@
 body {
-    background: orange;
+    background: #eee;
 }
 
 img {
     width: 80px;
     height: 80px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
 }
