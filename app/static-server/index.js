@@ -17,13 +17,16 @@ let staticFunc = (url) => {
         '/list': 'list.html'
     }
     url = map[url] || url
-    let body = ''
-    try {
-        body = fs.readFileSync(getPath(url))
-    }catch(error) {
-        body = `NOT FOUND ${error.stack}`
-    }
-    return body
+
+    return new Promise((resolve, reject)=> {
+        let _path = getPath(url)
+        let body = fs.readFile(_path, (error, data)=> {
+            if (error) {
+                reject(`NOT FOUND ${error.stack}`)
+            }
+            resolve(data)
+        })
+    })
 }
 
 module.exports = staticFunc

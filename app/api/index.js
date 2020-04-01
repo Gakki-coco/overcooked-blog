@@ -7,5 +7,5 @@ module.exports = (url)=> {
         '/list.action': ['吉他', '三只松鼠', 'MongoDB'],
         '/user.action': ['Gakki', '女性', '日本']
     }
-    return apiMap[url]
+    return Promise.resolve(apiMap[url])
 }
