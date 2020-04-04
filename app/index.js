@@ -17,27 +17,26 @@ class App {
             let { url } = request
             // 所有以 action 结尾的 url，都认为它是 ajax
             // 返回一个字符串或者 buffer
+            // 每个请求逻辑根据 url 进行代码分发
             // DRY
-            let body = ''
-            let headers = {}
-            if (url.match('action')) {
-                apiServer(url).then(resolve=> {
-                    body = JSON.stringify(resolve)
-                    headers = {
-                        'Content-Type': 'application/json'
-                    }
-                    let finalHeader = Object.assign(headers, { 'X-powered-by': 'Node.js' })
+            apiServer(url).then(value => {
+                if (!value) {
+                    return staticServer(url)
+                } else {
+                    return value
+                }
+            }).then(value => {
+                let base = { 'X-powered-by': 'Node.js' }
+                let body = ''
+                if (value instanceof Buffer) {
+                    body = value
+                } else {
+                    body = JSON.stringify(value)
+                    let finalHeader = Object.assign(base, { 'Content-Type': 'application/json' })
                     response.writeHead(200, 'Resolve OK', finalHeader)
-                    response.end(body)
-                })
-            } else {
-                // 每个请求逻辑根据 url 进行代码分发
-                staticServer(url).then(body=> {
-                    let finalHeader = Object.assign(headers, { 'X-powered-by': 'Node.js' })
-                    response.writeHead(200, 'Resolve OK', finalHeader)
-                    response.end(body)
-                })
-            }
+                }
+                response.end(body)
+            })
         }
     }
 }
