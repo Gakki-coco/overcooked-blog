@@ -4,6 +4,7 @@
 
 const staticServer = require('./static-server')
 const apiServer = require('./api')
+const urlParser = require('./url-parser')
 
 class App {
     constructor() {
@@ -18,7 +19,14 @@ class App {
             // 返回一个字符串或者 buffer
             // 每个请求逻辑根据 url 进行代码分发
             // DRY
-            apiServer(request).then(value => {
+            request.context = {
+                body: '',
+                query: {},
+                method: 'get'
+            }
+            urlParser(request).then(()=> {
+                return apiServer(request)
+            }).then(value => {
                 if (!value) {
                     return staticServer(request)
                 } else {
