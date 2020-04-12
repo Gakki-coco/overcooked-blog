@@ -10,7 +10,8 @@ let getPath = (url) => {
     return path.resolve(process.cwd(), `public/${url}`)
 }
 
-let staticFunc = (url) => {
+let staticFunc = (request) => {
+    let { url } = request
     let map = {
         '/': 'index.html',
         '/about': 'about.html',
@@ -18,9 +19,9 @@ let staticFunc = (url) => {
     }
     url = map[url] || url
 
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
         let _path = getPath(url)
-        let body = fs.readFile(_path, (error, data)=> {
+        let body = fs.readFile(_path, (error, data) => {
             if (error) {
                 resolve(`NOT FOUND ${error.stack}`)
             }

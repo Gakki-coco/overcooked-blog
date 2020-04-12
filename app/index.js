@@ -14,14 +14,13 @@ class App {
 
         // 核心逻辑，高阶函数
         return (request, response) => {
-            let { url } = request
             // 所有以 action 结尾的 url，都认为它是 ajax
             // 返回一个字符串或者 buffer
             // 每个请求逻辑根据 url 进行代码分发
             // DRY
-            apiServer(url).then(value => {
+            apiServer(request).then(value => {
                 if (!value) {
-                    return staticServer(url)
+                    return staticServer(request)
                 } else {
                     return value
                 }

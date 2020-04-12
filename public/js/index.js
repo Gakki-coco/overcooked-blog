@@ -13,9 +13,14 @@ setTimeout(function() {
             console.log(error)
         }
     })
+    // 模拟 POST
     $.ajax({
         url: '/list.action',
-        method: 'get',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(['Gakki', 'Node.js']),
         success: function (array) {
             var liStr = array.map(function (element) {
                 return '<li>' + element + '</li>'
