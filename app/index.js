@@ -19,29 +19,26 @@ class App {
             // 返回一个字符串或者 buffer
             // 每个请求逻辑根据 url 进行代码分发
             // DRY
-            request.context = {
-                body: '',
-                query: {},
-                method: 'get'
+            let context = {
+                req: request,
+                reqCtx: {
+                    body: '', // post 请求的数据
+                    query: {} // 处理客户端 get 请求
+                },
+                res: response,
+                resCtx: {
+                    headers: {}, // response 返回报文
+                    body: '' // 返回给前端的内容区
+                }
             }
-            urlParser(request).then(()=> {
-                return apiServer(request)
-            }).then(value => {
-                if (!value) {
-                    return staticServer(request)
-                } else {
-                    return value
-                }
-            }).then(value => {
+            urlParser(context).then(() => {
+                return apiServer(context)
+            }).then(() => {
+                return staticServer(context)
+            }).then(() => {
                 let base = { 'X-powered-by': 'Node.js' }
-                let body = ''
-                if (value instanceof Buffer) {
-                    body = value
-                } else {
-                    body = JSON.stringify(value)
-                    let finalHeader = Object.assign(base, { 'Content-Type': 'application/json' })
-                    response.writeHead(200, 'Resolve OK', finalHeader)
-                }
+                let { body } = context.resCtx
+                response.writeHead(200, 'Resolve OK', base)
                 response.end(body)
             })
         }

@@ -6,24 +6,23 @@
 
 //  request: query、body、method
 
-module.exports = (request) => {
-    let { url, method, context } = request
+module.exports = (context) => {
+    let { url, method } = context.req
+    let { reqCtx } = context
     method = method.toLowerCase()
     return Promise.resolve({
         then: (resolve, reject) => {
             // request 原型链上有 readable、stream、eventEmitter
-            context.method = method
-            context.query = {}
             if (method === 'post') {
                 let data = ''
                 // stream 分为 paused 和 flow 两种状态
-                request.on('data', (chunk) => {
+                context.req.on('data', (chunk) => {
                     data += chunk
                 }).on('end', () => {
-                    context.body = JSON.parse(data)
+                    reqCtx.body = JSON.parse(data)
                     resolve()
                 })
-            }else {
+            } else {
                 resolve()
             }
         }
