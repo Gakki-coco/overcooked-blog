@@ -2,13 +2,24 @@
  * 主要核心逻辑入口
  */
 
-const staticServer = require('./static-server')
-const apiServer = require('./api')
-const urlParser = require('./url-parser')
-
 class App {
     constructor() {
-
+        this.middlewareArr = []
+        // 设计一个空的 Promise
+        this.middlewareChain = Promise.resolve()
+    }
+    use(middleware) {
+        this.middlewareArr.push(middleware)
+    }
+    // 根据中间件数组，创建 Promise 链条
+    composeMiddleware(context) {
+        let { middlewareArr } = this
+        for (let middleware of middlewareArr) {
+            this.middlewareChain = this.middlewareChain.then(() => {
+                return middleware(context)
+            })
+        }
+        return this.middlewareChain
     }
     initServer() {
         // 初始化工作
@@ -31,14 +42,14 @@ class App {
                     body: '' // 返回给前端的内容区
                 }
             }
-            urlParser(context).then(() => {
-                return apiServer(context)
-            }).then(() => {
-                return staticServer(context)
-            }).then(() => {
+            // 1. 每一块中间件只需关注修改 context 对象即可，彼此独立
+            // 2. 设计了 use 和 composeMiddleware 这两个 API，用来创建 Promise 链条
+            // 3. 开发者可以专注于中间件开发，而不需要关注具体逻辑
+            // 4. 函数体可以百年不变
+            this.composeMiddleware(context).then(() => {
                 let base = { 'X-powered-by': 'Node.js' }
-                let { body } = context.resCtx
-                response.writeHead(200, 'Resolve OK', base)
+                let { body, headers } = context.resCtx
+                response.writeHead(200, 'Resolve OK', Object.assign(base, headers))
                 response.end(body)
             })
         }
