@@ -14,12 +14,14 @@ module.exports = (context) => {
         then: (resolve, reject) => {
             // request 原型链上有 readable、stream、eventEmitter
             if (method === 'post') {
-                let data = ''
+                let data = []
                 // stream 分为 paused 和 flow 两种状态
+                // 汉字会占用 3 位 Buffer，所以不能直接 data += chunk
                 context.req.on('data', (chunk) => {
-                    data += chunk
+                    data.push(chunk)
                 }).on('end', () => {
-                    reqCtx.body = JSON.parse(data)
+                    let endData = Buffer.concat(data).toString()
+                    reqCtx.body = JSON.parse(endData)
                     resolve()
                 })
             } else {
