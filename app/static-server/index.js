@@ -1,6 +1,7 @@
 /**
  * created by Gakki
  * 静态资源服务
+ * 图片、js、css、font
  */
 const fs = require('fs')
 const path = require('path')
@@ -13,15 +14,9 @@ let getPath = (url) => {
 let staticFunc = (context) => {
     let { url } = context.req
     let { resCtx } = context
-    let map = {
-        '/': 'index.html',
-        '/about': 'about.html',
-        '/list': 'list.html'
-    }
-    url = map[url] || url
 
     return new Promise((resolve, reject) => {
-        if (!url.match('action')) {
+        if (!url.match('action') && url.match(/\./)) {
             let _path = getPath(url)
             fs.readFile(_path, (error, data) => {
                 if (error) {
