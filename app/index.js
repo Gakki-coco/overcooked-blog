@@ -38,6 +38,8 @@ class App {
                 },
                 res: response,
                 resCtx: {
+                    statusCode: 200,
+                    statusMessage: 'Resolve OK',
                     headers: {}, // response 返回报文
                     body: '' // 返回给前端的内容区
                 }
@@ -48,8 +50,8 @@ class App {
             // 4. 函数体可以百年不变
             this.composeMiddleware(context).then(() => {
                 let base = { 'X-powered-by': 'Node.js' }
-                let { body, headers } = context.resCtx
-                response.writeHead(200, 'Resolve OK', Object.assign(base, headers))
+                let { body, headers, statusCode, statusMessage } = context.resCtx
+                response.writeHead(statusCode, statusMessage, Object.assign(base, headers))
                 response.end(body)
             })
         }
