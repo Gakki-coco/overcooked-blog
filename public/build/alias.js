@@ -1,3 +1,4 @@
 module.exports = {
-    reset: 'css/reset.scss'
+    reset: 'css/reset.scss',
+    highlight: 'highlight'
 }

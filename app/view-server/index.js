@@ -21,12 +21,20 @@ module.exports = (context) => {
                 const viewPath = path.resolve(__dirname, 'ejs')
                 let ejsName = urlRewriteMap[url]
                 if (ejsName) {
-                    let htmlPath = path.resolve(viewPath, ejsName + '.ejs')
-                    let html = fs.readFileSync(htmlPath, 'utf-8')
+                    let layoutPath = path.resolve(viewPath, 'layout.ejs')
+                    let layoutHTML = fs.readFileSync(layoutPath, 'utf-8')
+
+
+                    let render = ejs.compile(layoutHTML, {
+                        compileDebug: true,
+                        filename: layoutPath
+                    })
+
+
                     resCtx.headers = Object.assign(resCtx.headers, {
                         'Content-Type': 'text/html'
                     })
-                    resCtx.body = html
+                    resCtx.body = render({templateName: ejsName})
                     resolve()
                 } else {
                     // 重定向
@@ -41,15 +49,6 @@ module.exports = (context) => {
                     resolve()
                 }
             }
-
-
-
-            // if (urlMap[url]) {
-            //     let render = ejs.compile(fs.readFileSync(htmlPath, 'utf-8'), {
-            //         compileDebug: true
-            //     })
-            //     resCtx.body = render()
-            // }
         }
     })
 }
