@@ -24,6 +24,7 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "cookie": "^0.4.1",
     "ejs": "^3.0.2",
     "mime": "^2.4.4"
   }

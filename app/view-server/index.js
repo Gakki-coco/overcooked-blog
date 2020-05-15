@@ -24,17 +24,21 @@ module.exports = (context) => {
                     let layoutPath = path.resolve(viewPath, 'layout.ejs')
                     let layoutHTML = fs.readFileSync(layoutPath, 'utf-8')
 
-
+                    // 生成一个 function
                     let render = ejs.compile(layoutHTML, {
                         compileDebug: true,
                         filename: layoutPath
                     })
 
-
                     resCtx.headers = Object.assign(resCtx.headers, {
                         'Content-Type': 'text/html'
                     })
-                    resCtx.body = render({templateName: ejsName})
+
+                    // model 和 view 的结合
+                    resCtx.body = render({
+                        templateName: ejsName,
+                        hasUser: resCtx.hasUser
+                    })
                     resolve()
                 } else {
                     // 重定向

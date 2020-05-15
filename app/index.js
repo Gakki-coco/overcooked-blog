@@ -38,6 +38,7 @@ class App {
                 },
                 res: response,
                 resCtx: {
+                    hasUser: false, // 标识用户
                     statusCode: 200,
                     statusMessage: 'Resolve OK',
                     headers: {}, // response 返回报文
