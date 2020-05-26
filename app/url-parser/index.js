@@ -6,10 +6,15 @@
 
 //  request: query、body、method
 
+const URL = require('url')
+
 module.exports = (context) => {
     let { url, method } = context.req
     let { reqCtx } = context
+
     method = method.toLowerCase()
+    Object.assign(reqCtx, URL.parse(url, true), method)
+
     return Promise.resolve({
         then: (resolve, reject) => {
             // request 原型链上有 readable、stream、eventEmitter

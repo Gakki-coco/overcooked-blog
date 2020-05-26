@@ -10,16 +10,16 @@ const path = require('path')
 const mime = require('mime')
 const urlRewriteMap = require('./urlrewrite')
 module.exports = (context) => {
-    let { req, resCtx } = context
-    let { url } = req
+    let { reqCtx, resCtx } = context
+    let { pathname } = reqCtx
     return Promise.resolve({
         then: (resolve, reject) => {
             // 过滤 ajax 和静态资源，只保留路由请求
-            if (url.match('action') || url.match(/\./)) {
+            if (pathname.match('action') || pathname.match(/\./)) {
                 resolve()
             } else {
                 const viewPath = path.resolve(__dirname, 'ejs')
-                let ejsName = urlRewriteMap[url]
+                let ejsName = urlRewriteMap[pathname]
                 if (ejsName) {
                     let layoutPath = path.resolve(viewPath, 'layout.ejs')
                     let layoutHTML = fs.readFileSync(layoutPath, 'utf-8')

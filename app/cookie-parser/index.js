@@ -5,7 +5,7 @@ const cookie_parser = require('cookie')
 // 设置白名单
 const whiteNameList = ['/name_Gakki']
 module.exports = (context) => {
-    let { url } = context.req
+    let { pathname } = context.reqCtx
     let { cookie } = context.req.headers
     let { res, resCtx } = context
     let cookieObj = cookie ? cookie_parser.parse(cookie) : {}
@@ -20,11 +20,11 @@ module.exports = (context) => {
             let cookieStr = time => `auth=true;Max-Age=${time}`
 
             // 登录
-            if (whiteNameList.indexOf(url) > -1) {
+            if (whiteNameList.indexOf(pathname) > -1) {
                 res.setHeader('Set-Cookie', cookieStr(100000))
             }
             // 登出
-            if (url === '/logout') {
+            if (pathname === '/logout') {
                 res.setHeader('Set-Cookie', cookieStr(0))
             }
             resolve()
