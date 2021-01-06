@@ -42,7 +42,7 @@
     "license": "ISC",
     "dependencies": {
         "antd": "^2.9.1",
-        "axios": "^0.16.1",
+        "axios": "^0.21.1",
         "highlight.js": "^9.10.0",
         "jquery": "^3.2.1",
         "marked": "^0.3.6",
